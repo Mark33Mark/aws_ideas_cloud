@@ -8,6 +8,8 @@ const params = (fileName) => {
     Bucket: `${process.env.BUCKET_NAME}`,
     Key: `${uuidv4()}.${fileType}`,
     Body: fileName.buffer,
+    // Access Control List: allows read access to this file
+    ACL: 'public-read', 
   };
 
   return imageParams;

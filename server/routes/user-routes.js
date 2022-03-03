@@ -48,11 +48,13 @@ router.get("/users/:username", (req, res) => {
       "#un": "username",
       "#ca": "createdAt",
       "#th": "thought",
+      "#img": "image"
     },
     ExpressionAttributeValues: {
       ":user": req.params.username,
     },
-    ProjectionExpression: "#th, #ca",
+    ProjectionExpression: "#un, #th, #ca, #img",
+    // false makes the order descending(true is default)
     ScanIndexForward: false,
   };
 
@@ -72,13 +74,14 @@ router.get("/users/:username", (req, res) => {
 // Create new thought at /api/users
 router.post('/users', (req, res) => {
   console.log(`Adding a new thought from ${req.params.username}.`);
-  const { username, thought} = req.body;
+  const { username, thought, image} = req.body;
   const params = {
     TableName: table,
     Item: {
       "username": username,
       "createdAt": Date.now(),
-      "thought": thought
+      "thought": thought,
+      "image": image
     }
   };
   dynamodb.put(params, (err, data) => {
